@@ -7,8 +7,9 @@ type T_PhotoList = {
     data: T_PhotoCard[] | []
 }
 
+
 export function PhotoList({ data }: T_PhotoList) {
-    if (data.length < 1) return <Typography>No Images Found</Typography>
+    if (!data || data?.length < 1) return <Typography>No Images Found</Typography>
     return (
         <Box sx={{
             display: 'flex',

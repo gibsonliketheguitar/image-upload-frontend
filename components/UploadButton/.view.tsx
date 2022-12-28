@@ -1,31 +1,41 @@
 import Image from 'next/image';
 import React, { useRef, useState } from "react";
-import { DialogActions, DialogContent, DialogContentText, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    IconButton,
+    TextField,
+    Typography
+} from "@mui/material";
+
 import CloseIcon from '@mui/icons-material/Close';
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import { Controller, useForm } from "react-hook-form";
-import Box from "@mui/system/Box";
+import { uploadToDB, uploadToS3 } from './api';
 
 type T_UploadForm = {
     title: string;
-    file: File;
+    file: File[];
 }
 
 export function UploadButton() {
-    const formRef: any = useRef(null)
-
+    const formRef = useRef<any>(null)
     const [open, setOpen] = useState<boolean>(false)
     const [preview, setPreview] = useState<string>('')
-
-    const { control, handleSubmit, formState, register, reset } = useForm<T_UploadForm>();
+    const { control, handleSubmit, register, reset } = useForm<T_UploadForm>({
+        defaultValues: {
+            title: '',
+            file: undefined
+        }
+    });
 
     const handleFileUpload = (e: any) => {
-        console.log('e', e)
-        const file = e.target.files[0]
-
-        setPreview(URL.createObjectURL(file))
+        const img = e.target.files[0]
+        setPreview(URL.createObjectURL(img))
     }
 
     const handleSubmitClick = () => {
@@ -35,8 +45,15 @@ export function UploadButton() {
         );
     }
 
-    const onSubmit = (data: T_UploadForm) => {
-        console.log('what is data', data)
+    const onSubmit = async (data: T_UploadForm) => {
+        try {
+            const key = await uploadToS3(data.file)
+            await uploadToDB({ title: data.title.toLowerCase(), key })
+        }
+        catch (error) {
+            console.log('Failed to upload')
+        }
+        handleClose()
     }
 
     const handleOpen = () => {
@@ -44,6 +61,8 @@ export function UploadButton() {
     }
 
     const handleClose = () => {
+        setPreview('')
+        reset({ title: '', file: undefined })
         setOpen(false)
     }
     return (
@@ -52,9 +71,11 @@ export function UploadButton() {
                 Open form dialog
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography> Upload</Typography>
-                    <CloseIcon />
+                    <IconButton onClick={handleClose}>
+                        <CloseIcon />
+                    </IconButton>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -82,6 +103,7 @@ export function UploadButton() {
                             {preview && <Image alt='uploaded image' src={preview} height={200} width={200} />}
                             <input
                                 id='imgFile'
+                                aria-label='upload-img'
                                 accept="image/*"
                                 multiple={false}
                                 type='file'
@@ -90,7 +112,6 @@ export function UploadButton() {
                             />
                         </Box>
                     </form>
-
                 </DialogContent>
                 <DialogActions>
                     <Button variant='outlined' onClick={handleClose}>Cancel</Button>
