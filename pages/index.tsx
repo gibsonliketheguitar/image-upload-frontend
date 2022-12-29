@@ -66,7 +66,7 @@ export default function Home(props: any) {
           padding: theme.spacing(4)
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: theme.spacing(4) }}>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.spacing(4) }}>
           <Search value={search} onChange={handleSearch} />
           <UploadButton />
         </Box>

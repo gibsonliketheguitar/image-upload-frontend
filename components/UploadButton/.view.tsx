@@ -75,8 +75,8 @@ export function UploadButton() {
     }
     return (
         <>
-            <Button variant="outlined" onClick={handleOpen}>
-                Open form dialog
+            <Button variant="outlined" onClick={handleOpen} sx={{ height: '100%', maxHeight: theme.spacing(7), width: theme.spacing(12) }}>
+                Upload
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
