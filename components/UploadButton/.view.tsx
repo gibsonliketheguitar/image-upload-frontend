@@ -10,12 +10,15 @@ import {
     DialogContentText,
     IconButton,
     TextField,
-    Typography
+    Typography,
+    CircularProgress
 } from "@mui/material";
 
 import CloseIcon from '@mui/icons-material/Close';
 import { Controller, useForm } from "react-hook-form";
 import { uploadToDB, uploadToS3 } from './api';
+import { useRouter } from 'next/router';
+import theme from 'styles/theme';
 
 type T_UploadForm = {
     title: string;
@@ -24,8 +27,10 @@ type T_UploadForm = {
 
 export function UploadButton() {
     const formRef = useRef<any>(null)
+    const router = useRouter()
     const [open, setOpen] = useState<boolean>(false)
     const [preview, setPreview] = useState<string>('')
+    const [isUploading, setIsUploading] = useState(false)
     const { control, handleSubmit, register, reset } = useForm<T_UploadForm>({
         defaultValues: {
             title: '',
@@ -39,7 +44,9 @@ export function UploadButton() {
     }
 
     const handleSubmitClick = () => {
-        if (!formRef) return
+        //Trigger form click with ref
+        if (!formRef || isUploading) return
+        setIsUploading(true)
         formRef?.current.dispatchEvent(
             new Event("submit", { cancelable: true, bubbles: true })
         );
@@ -61,6 +68,7 @@ export function UploadButton() {
     }
 
     const handleClose = () => {
+        setIsUploading(false)
         setPreview('')
         reset({ title: '', file: undefined })
         setOpen(false)
@@ -77,7 +85,7 @@ export function UploadButton() {
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent>
+                <DialogContent >
                     <DialogContentText>
                         Upload a picture along with a title!
                     </DialogContentText>
@@ -113,9 +121,17 @@ export function UploadButton() {
                         </Box>
                     </form>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ paddingX: theme.spacing(3), paddingTop: theme.spacing(4), paddingBottom: theme.spacing(2) }}>
                     <Button variant='outlined' onClick={handleClose}>Cancel</Button>
-                    <Button type='submit' variant='contained' onClick={handleSubmitClick}>Upload</Button>
+                    <Button
+                        variant='contained'
+                        startIcon={
+                            isUploading ? <CircularProgress size={16} sx={{ color: 'white' }} /> : <></>}
+                        type='submit'
+                        sx={{ bgcolor: isUploading ? theme.palette.primary.dark : theme.palette.primary.main }}
+                        onClick={handleSubmitClick}>
+                        Upload
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>

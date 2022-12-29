@@ -5,6 +5,7 @@ const getSignedUrl = async (type: string) => {
     return await response.json()
 }
 
+//TODO it may be possible to move this to api layer?
 export async function uploadToS3(file: File[]) {
     const type = file[0].type.split('/')[1]
     const { uploadURL, key } = await getSignedUrl(type)
