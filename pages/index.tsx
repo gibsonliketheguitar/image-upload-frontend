@@ -21,9 +21,13 @@ export default function Home(props: any) {
   function filter(images: T_PhotoCard[]) {
     if (search.length === 0 || images.length === 0) return images
     const wordMap: any = new Set()
-    return images.filter((img: any) => {
+    const words = search.trim().split(' ')
+
+    words.forEach((word) => wordMap.add(word))
+
+    return images.filter((img: T_PhotoCard) => {
       for (const [word] of wordMap) {
-        if (img.title.contains(word)) return true
+        if (img.title.includes(word)) return true
       }
       return false
     })
