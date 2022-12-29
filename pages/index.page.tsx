@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { Box, Container } from '@mui/material'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { getData } from './api/photo'
+import { getData } from './api/photo.api'
 import theme from 'styles/theme'
 
 import { PhotoList } from 'components/PhotoList'
