@@ -56,6 +56,7 @@ export function UploadButton() {
         try {
             const key = await uploadToS3(data.file)
             await uploadToDB({ title: data.title.toLowerCase(), key })
+            setTimeout(() => router.reload())
         }
         catch (error) {
             console.log('Failed to upload')

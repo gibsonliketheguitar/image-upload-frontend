@@ -13,7 +13,6 @@ type Data = {
 const store: T_PhotoCard[] = []
 
 export async function getData() {
-    console.log('what is store', store)
     return store
 }
 
@@ -27,7 +26,6 @@ export default async function handler(
             title,
             imgURL: process.env.BUCKET_URL + '/' + key
         })
-        console.log('what is store', store)
         res.status(200).json({ message: 'image uploaded' })
     }
     else if (req.method === 'GET') {
