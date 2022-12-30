@@ -11,7 +11,6 @@ export type T_PhotoCard = {
 }
 
 const Item = styled(Box)(({ theme }: any) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
 }));
 
 export function Card(props: T_PhotoCard) {

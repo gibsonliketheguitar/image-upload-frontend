@@ -21,8 +21,8 @@ import { useRouter } from 'next/router';
 import theme from 'styles/theme';
 
 type T_UploadForm = {
-    title: string;
-    file: File[];
+    title: string,
+    file: File[]
 }
 
 export function UploadButton() {
