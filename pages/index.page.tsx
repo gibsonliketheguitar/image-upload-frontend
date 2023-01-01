@@ -21,28 +21,28 @@ export default function Home(props: any) {
   function filter(images: T_PhotoCard[]) {
     if (search.length === 0 || images.length === 0) return images
     const wordMap: any = new Set()
-    const words = search.trim().split(' ')
+    const words = search.trim().toLowerCase().split(" ");
 
     words.forEach((word) => wordMap.add(word))
 
     return images.filter((img: T_PhotoCard) => {
-      for (const [word] of wordMap) {
-        if (img.title.includes(word)) return true
+      for (const word of wordMap) {
+        if (!img.title.includes(word)) return false;
       }
-      return false
-    })
+      return true;
+    });
   }
 
   //If search is empty get all images
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('/api/photo')
-      const { data } = await response.json()
-      setImages(data)
+      const response = await fetch("/api/photo");
+      const { data } = await response.json();
+      setImages(data);
     }
 
-    if (search.length < 2) fetchData()
-  }, [search])
+    if (search.length < 2 && images.length < 1) fetchData();
+  }, [search]);
 
   useEffect(() => {
     console.log('what is images', images)

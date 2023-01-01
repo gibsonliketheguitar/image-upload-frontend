@@ -40,7 +40,7 @@ export function UploadButton() {
 
     const handleFileUpload = (e: any) => {
         const img = e.target.files[0]
-        setPreview(URL.createObjectURL(img))
+    setPreview(URL.createObjectURL(img) || "");
     }
 
     const handleSubmitClick = () => {
