@@ -4,19 +4,20 @@ import { PhotoList } from '../.view'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 
-const photoCards = [
-    {
-        title: 'Picture Photo Card',
-        imgURL: 'https://picsum.photos/200'
-    },
-    {
-        title: 'Picture Photo Card2',
-        imgURL: 'https://picsum.photos/201'
-    }
-]
 
 describe('Photo List', () => {
     test('should render 2 Photo Card with their respective alt and src data', () => {
+        const photoCards = [
+            {
+                title: 'Picture Photo Card',
+                imgURL: 'https://picsum.photos/200'
+            },
+            {
+                title: 'Picture Photo Card2',
+                imgURL: 'https://picsum.photos/201'
+            }
+        ]
+
         render(<PhotoList data={photoCards} />)
 
         const image = screen.getByAltText('Picture Photo Card')

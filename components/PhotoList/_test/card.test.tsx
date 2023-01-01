@@ -4,14 +4,16 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import { Card } from '../card'
 
-const data = {
-    title: 'Picture Photo Card',
-    imgURL: 'https://picsum.photos/200'
-}
-
 describe('Photo Card', () => {
+    let title: string;
+    let imgURL: string;
+
+    beforeEach(() => {
+        title = 'Picture Photo Card',
+            imgURL = 'https://picsum.photos/200'
+    })
     test('should render title as alt and src with imgURL', () => {
-        render(<Card {...data} />)
+        render(<Card title={title} imgURL={imgURL} />)
 
         const image = screen.getByAltText('Picture Photo Card')
         expect(image).toBeDefined()
