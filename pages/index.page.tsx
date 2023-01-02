@@ -1,29 +1,29 @@
-import Head from 'next/head'
-import { Box, Container } from '@mui/material'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import { getData } from './api/photo.api'
-import theme from 'styles/theme'
+import Head from "next/head";
+import { Box, Container } from "@mui/material";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { getData } from "./api/photo.api";
+import theme from "styles/theme";
 
-import { PhotoList } from 'components/PhotoList'
-import { T_PhotoCard } from 'components/PhotoList/card'
-import { Search } from 'components/Search'
-import { UploadButton } from 'components/UploadButton'
+import { PhotoList } from "components/PhotoList";
+import { T_PhotoCard } from "components/PhotoList/card";
+import { Search } from "components/Search";
+import { UploadButton } from "components/UploadButton";
 
 export default function Home(props: any) {
-  const [search, setSearch] = useState<string>('')
-  const [images, setImages] = useState<T_PhotoCard[]>([])
+  const [search, setSearch] = useState<string>("");
+  const [images, setImages] = useState<T_PhotoCard[]>(props.data);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value)
-  }
+    setSearch(e.target.value);
+  };
 
   function filter(images: T_PhotoCard[]) {
-    if (search.length === 0 || images.length === 0) return images
-    const wordMap: any = new Set()
+    if (search.length === 0 || images.length === 0) return images;
+    const wordMap: any = new Set();
     const words = search.trim().toLowerCase().split(" ");
 
-    words.forEach((word) => wordMap.add(word))
+    words.forEach((word) => wordMap.add(word));
 
     return images.filter((img: T_PhotoCard) => {
       for (const word of wordMap) {
@@ -45,8 +45,8 @@ export default function Home(props: any) {
   }, [search]);
 
   useEffect(() => {
-    console.log('what is images', images)
-  }, [images])
+    console.log("what is images", images);
+  }, [images]);
 
   return (
     <>
@@ -58,15 +58,23 @@ export default function Home(props: any) {
       <Container
         maxWidth="md"
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          height: '100vh',
-          padding: theme.spacing(4)
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          height: "100vh",
+          padding: theme.spacing(4),
         }}
       >
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: theme.spacing(4) }}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: theme.spacing(4),
+          }}
+        >
           <Search value={search} onChange={handleSearch} />
           <UploadButton />
         </Box>
@@ -74,10 +82,10 @@ export default function Home(props: any) {
         <PhotoList data={filter(images)} />
       </Container>
     </>
-  )
+  );
 }
 
 export async function getServerSideProps() {
-  const data = await getData()
-  return { props: { props: { data } } } // will be passed to the page component as props
+  const data = await getData();
+  return { props: { data } }; // will be passed to the page component as props
 }
