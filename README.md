@@ -21,8 +21,8 @@ yarn dev
 
 ### Live Link
 
-https://image-upload-frontend.vercel.app/https://image-upload-frontend.vercel.app/
-
+[live link
+](https://image-upload-frontend-268qirp0y-gibsonliketheguitar.vercel.app/)
 ## Requirements for take home
 
 - User can upload a picture
